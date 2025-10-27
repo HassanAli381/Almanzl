@@ -1,5 +1,7 @@
+import ProductDetailsPage from "../pages/productDetails/ProductDetailsPage";
+
 function App() {
-  return <div></div>;
+  return <ProductDetailsPage />;
 }
 
 export default App;
