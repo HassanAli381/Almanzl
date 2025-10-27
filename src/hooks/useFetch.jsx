@@ -1,24 +1,38 @@
 import { useState, useEffect } from "react";
+import axios from "@/lib/axios";
 
 export function useFetch(url) {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!url) return;
-    async function fetchData() {
+
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
-        setLoading(true);
-        const res = await fetch(url);
-        const json = res.json();
-        setData(json);
-      } catch (error) {
-        setError(error.message);
+        const res = await axios.get(url);
+        setData(res.data);
+      } catch (err) {
+        if (err.response) {
+          setError(
+            `Error ${err.response.status}: ${
+              err.response.data.message || "Request failed"
+            }`
+          );
+        } else if (err.request) {
+          setError("No response from server");
+        } else {
+          setError(err.message);
+        }
       } finally {
         setLoading(false);
       }
-    }
+    };
+
     fetchData();
   }, [url]);
 
