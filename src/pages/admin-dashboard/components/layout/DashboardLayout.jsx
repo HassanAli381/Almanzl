@@ -8,7 +8,6 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <Navbar />
       <div className="flex flex-1 overflow-hidden">
         <div
           className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-sm border-r border-gray-200 transform transition-transform duration-300 ease-in-out 
