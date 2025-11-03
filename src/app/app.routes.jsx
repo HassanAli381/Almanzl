@@ -12,12 +12,13 @@ import UsersTable from "../pages/admin-dashboard/components/tables/Users";
 import MainLayout from "./Layout/MainLayout";
 import NotFound from "../components/NotFound";
 import ProductDetailsPage from "../pages/productDetails/ProductDetailsPage";
+import HomePage from "../pages/HomePage";
 
 function AppRoutes() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        <Route path="/" element={<h1>home</h1>} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<h1>products</h1>} />
         <Route path="/products/:id" element={<ProductDetailsPage />} />
         <Route path="/contact" element={<h1>contact</h1>} />
