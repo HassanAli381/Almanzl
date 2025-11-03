@@ -1,34 +1,108 @@
+import { useState, useRef, useEffect } from "react";
 import ExpandableText from "../../../components/ExpandableText";
 import Rating from "../../../components/Rating";
+import { MoreVertical } from "lucide-react";
+import Constants from "../../../app/constants";
+import { toast } from "react-toastify";
+import useProductReviews from "../context/productReviews/useProductReviews";
+import EditReviewModal from "./EditReviewModal";
+import api from "../../../lib/axios";
 
-function Review() {
+function Review({ review }) {
+  const { setProductReviews } = useProductReviews();
+  const [showModal, setShowModal] = useState(false);
+
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  const formattedDate = new Date(review.createdAt).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+  });
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  async function onDelete() {
+    try {
+      await api.delete(
+        `${Constants.BASE_URL}/products/690716ee329f24ecdb9fe8ab/reviews/${review._id}`
+      );
+
+      toast.success("Review deleted successfully");
+      setProductReviews((prevReviews) =>
+        prevReviews.filter((r) => r._id !== review._id)
+      );
+    } catch (error) {
+      toast.error("Failed to delete review");
+      console.log(error);
+    }
+  }
+
   return (
     <div className="my-5">
-      <div className="flex items-center me-auto">
+      <div className="flex items-center me-auto relative">
         <img
-          src="https://t4.ftcdn.net/jpg/05/31/37/89/360_F_531378938_xwRjN9e5ramdPj2coDwHrwk9QHckVa5Y.jpg"
-          alt="Reviewer Image"
+          src={review.user.image ?? "src/assets/default.jpg"}
+          alt="Reviewer"
           className="h-12 w-12 rounded-full object-cover"
         />
-        <p className="ms-2 font-semibold">Ahmed Mohamed</p>
+        <p className="ms-2 font-semibold">{review.user.name}</p>
+
         <div className="h-0.5 w-0.5 rounded-full bg-black mx-2"></div>
-        <p className="me-auto">22 Jul</p>
-        <Rating size={20} readonly value={5} />
+        <p className="me-auto">{formattedDate}</p>
+
+        <Rating size={20} readonly value={+review.rating} />
+
+        {review.user._id === "69062d5680812c679d905a85" && (
+          <div ref={menuRef} className="relative ml-2">
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="p-1 hover:bg-gray-100 rounded-full"
+            >
+              <MoreVertical size={20} />
+            </button>
+
+            {menuOpen && (
+              <div className="absolute right-0 mt-1 w-28 bg-white border  shadow-md z-10">
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    setShowModal(true);
+                  }}
+                  className="block w-full text-left px-3 py-2 hover:bg-gray-100"
+                >
+                  Update
+                </button>
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onDelete();
+                  }}
+                  className="block w-full text-left px-3 py-2 hover:bg-gray-100 text-red-500"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
-      <ExpandableText
-        maxLines={2}
-        className="mt-2"
-        children="KaiB was amazing with our cats!! 🌟🌟🌟 This was our first time using a
-        pet-sitting service, so we were naturally quite anxious. We took a
-        chance on Kai and completely lucked out! We booked Kai to come twice a
-        day for three days. Kai spent a considerable amount of time playing and
-        engaging with our cats. She also sent us very funny and detailed reports
-        at the end of each session. She truly gave us peace of mind while on
-        holiday, knowing our furbabies were in good hands. We also kept looking
-        forward to her cute updates! You can tell she’s a natural with animals.
-        I'd definitely book her again. Highly recommended!"
-      />
+      <ExpandableText maxLines={2} className="mt-2">
+        {review.review}
+      </ExpandableText>
+
+      {showModal && (
+        <EditReviewModal review={review} onClose={() => setShowModal(false)} />
+      )}
     </div>
   );
 }
