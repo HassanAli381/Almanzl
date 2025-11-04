@@ -6,6 +6,7 @@ import ProductReviews from "./components/ProductReviews";
 import SimilarProducts from "./components/SimilarProducts";
 import Error from "../../components/Error";
 import ProductReviewsProvider from "./context/productReviews/ProductReviewsProvider";
+import ProductQuantityProvider from "./context/productQuantity/ProductQuantityProvider";
 import { useFetch } from "../../hooks/useFetch";
 import { useParams } from "react-router-dom";
 import ProductImagesCarousel from "./components/ProductImagesCarousel";
@@ -28,7 +29,9 @@ function ProductDetailsPage() {
           <ProductImagesCarousel product={product} />
           <ProductInfo product={product} />
           <ProductDescription product={product} />
-          <AddProductToCart product={product} />
+          <ProductQuantityProvider>
+            <AddProductToCart product={product} />
+          </ProductQuantityProvider>
           <ProductReviews />
         </div>
 

@@ -2,9 +2,13 @@ import { Search, ShoppingBag, Menu } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../pages/authentication/context/AuthContext";
+import { CartContext } from "../pages/cart/context/CartContext";
 import SearchContext from "../context/search/SearchContext";
 
 export default function Navbar() {
+  const { cart } = useContext(CartContext);
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
   const { user, logout } = useContext(AuthContext);
   const { query, setQuery } = useContext(SearchContext);
 
@@ -71,16 +75,23 @@ export default function Navbar() {
           {user ? (
             <span className="font-semibold">{user.name}</span>
           ) : (
-            <Link to="/signin" className="font-semibold">
+            <Link to="/login" className="font-semibold">
               Sign In
             </Link>
           )}
         </div>
 
-        <ShoppingBag
+        <div
+          className="flex items-center gap-1 cursor-pointer"
           onClick={() => navigate("/cart")}
-          className="w-5 h-5 cursor-pointer hover:text-yellow-400"
-        />
+        >
+          <ShoppingBag className="w-5 h-5 hover:text-hover" />
+          {totalItems > 0 && (
+            <span className="text-sm font-semibold text-hover">
+              {totalItems}
+            </span>
+          )}
+        </div>
 
         {user && (
           <div className="relative">
@@ -109,12 +120,13 @@ export default function Navbar() {
                 >
                   Cart
                 </Link>
-                <button
+                <Link
+                  to="/login"
                   onClick={logout}
                   className="block w-full text-left px-4 py-2 hover:bg-yellow-400 text-sm text-red-500 cursor-pointer"
                 >
                   Logout
-                </button>
+                </Link>
               </div>
             )}
           </div>
