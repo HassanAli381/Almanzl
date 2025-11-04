@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
-import { AuthContext } from "./AuthContext";
 import api from "../../../lib/axios";
 import { toast } from "react-toastify";
 
@@ -72,10 +71,17 @@ export function AuthProvider({ children }) {
     clearAuth();
   }, [clearAuth]);
 
-    const updatedUser = { ...user, address: newAddress };
-    setUser(updatedUser);
-    localStorage.setItem("user", JSON.stringify(updatedUser));
-  };
+  const updateAddress = useCallback(
+    (newAddress) => {
+      if (!user) return;
+
+      const updatedUser = { ...user, address: newAddress };
+      setUser(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+    },
+    [user]
+  );
+
   const value = useMemo(
     () => ({
       user,
@@ -86,7 +92,7 @@ export function AuthProvider({ children }) {
       logout,
       updateAddress,
     }),
-    [user, login, signup, forgotPassword, resetPassword, logout]
+    [user, login, signup, forgotPassword, resetPassword, logout, updateAddress]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
