@@ -72,6 +72,10 @@ export function AuthProvider({ children }) {
     clearAuth();
   }, [clearAuth]);
 
+    const updatedUser = { ...user, address: newAddress };
+    setUser(updatedUser);
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+  };
   const value = useMemo(
     () => ({
       user,
@@ -80,6 +84,7 @@ export function AuthProvider({ children }) {
       forgotPassword,
       resetPassword,
       logout,
+      updateAddress,
     }),
     [user, login, signup, forgotPassword, resetPassword, logout]
   );
