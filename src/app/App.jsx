@@ -13,14 +13,14 @@ function App() {
     return (
         <Router>
             <AuthProvider>
-        <CartProvider>
-                  <SearchProvider>
-                    <ProductsProvider>
-                        <ToastContainer position="top-right" autoClose={3000} />
-                          <AppRoutes />
-        </CartProvider>
-                    </ProductsProvider>
-                </SearchProvider>
+                <CartProvider>
+                    <SearchProvider>
+                        <ProductsProvider>
+                            <ToastContainer position="top-right" autoClose={3000} />
+                            <AppRoutes />
+                        </ProductsProvider>
+                    </SearchProvider>
+                </CartProvider>
             </AuthProvider>
         </Router>
     );
