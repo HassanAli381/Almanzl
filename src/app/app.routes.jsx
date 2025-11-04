@@ -23,14 +23,18 @@ import Login from "../pages/authentication/pages/Login";
 import Signup from "../pages/authentication/pages/Signup";
 import ForgotPassword from "../pages/authentication/pages/ForgotPassword";
 import ResetPassword from "../pages/authentication/pages/ResetPassword";
+<<<<<<< HEAD
 import Profile from "../pages/ProfilePage";
+=======
+import AllProducts from "../components/AllProducts";
+>>>>>>> 94fdc5246e79abea241f11da94d67f43b15595b7
 
 function AppRoutes() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/products" element={<h1>products</h1>} />
+        <Route path="/products" element={<AllProducts />} />
         <Route
           path="/products/:id"
           element={
