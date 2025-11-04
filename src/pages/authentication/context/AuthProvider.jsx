@@ -76,6 +76,7 @@ export function AuthProvider({ children }) {
       await api.post("/auth/forgotPassword", { email });
       return true;
     } catch (e) {
+      setError(e.message);
       return true;
     } finally {
       setLoading(false);
@@ -83,6 +84,10 @@ export function AuthProvider({ children }) {
   };
 
   const resetPassword = async (token, { password, passwordConfirm }) => {
+    if (password != passwordConfirm) {
+      setError("password don't match");
+      return;
+    }
     setLoading(true);
     setError("");
     try {
@@ -102,7 +107,13 @@ export function AuthProvider({ children }) {
   const logout = () => {
     clearAuth();
   };
+  const updateAddress = (newAddress) => {
+    if (!user) return;
 
+    const updatedUser = { ...user, address: newAddress };
+    setUser(updatedUser);
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+  };
   const value = useMemo(
     () => ({
       user,
@@ -114,6 +125,7 @@ export function AuthProvider({ children }) {
       forgotPassword,
       resetPassword,
       logout,
+      updateAddress,
     }),
     [user, loading, error]
   );
