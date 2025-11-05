@@ -25,6 +25,7 @@ import ForgotPassword from "../pages/authentication/pages/ForgotPassword";
 import ResetPassword from "../pages/authentication/pages/ResetPassword";
 import Profile from "../pages/ProfilePage";
 import AllProducts from "../components/AllProducts";
+import CategoryPage from "../pages/CategoryPage";
 
 function AppRoutes() {
   return (
@@ -32,6 +33,7 @@ function AppRoutes() {
       <Route element={<MainLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<AllProducts />} />
+        <Route path="/category/:categoryId" element={<CategoryPage />} />
         <Route
           path="/products/:id"
           element={
