@@ -12,10 +12,14 @@ import SuccessPayment from "../pages/checkout/SuccessPayment";
 import CancelPayment from "../pages/checkout/CancelPayment";
 import SucessCashPayment from "../pages/checkout/SuccessCashPayment";
 import Profile from "../pages/ProfilePage";
+import Contact from "../pages/Contact/contact";
+import AboutUs from "../pages/aboutUs/aboutUs";
 import Login from "../pages/authentication/pages/Login";
 import Signup from "../pages/authentication/pages/Signup";
 import ForgotPassword from "../pages/authentication/pages/ForgotPassword";
 import ResetPassword from "../pages/authentication/pages/ResetPassword";
+import CategoryPage from "../pages/CategoryPage";
+
 import NotFound from "../components/NotFound";
 import UnAuthorized from "../components/UnAuthorized";
 import ProtectedRoutes from "./ProtectedRoutes";
@@ -35,6 +39,7 @@ function AppRoutes() {
       <Route element={<MainLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<AllProducts />} />
+        <Route path="/category/:categoryId" element={<CategoryPage />} />
         <Route
           path="/products/:id"
           element={
@@ -43,8 +48,8 @@ function AppRoutes() {
             </ProductProvider>
           }
         />
-        <Route path="/contact" element={<h1>contact</h1>} />
-        <Route path="/about" element={<h1>about</h1>} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/about" element={<AboutUs />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
