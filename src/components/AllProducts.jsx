@@ -12,6 +12,9 @@ const AllProducts = () => {
     const { products, loading, error, page, setPage, limit, setQuery, setCategory, setPriceRange } =
         useContext(ProductsContext);
 
+    const [showFilters, setShowFilters] = useState(false);
+    const toggleFilters = () => setShowFilters((prev) => !prev);
+    
     if (loading) {
         return <ShimmerProducts count={limit} />;
     }
@@ -26,8 +29,6 @@ const AllProducts = () => {
         setPriceRange({ min: 0, max: 10_000 });
     }
 
-    const [showFilters, setShowFilters] = useState(false);
-    const toggleFilters = () => setShowFilters((prev) => !prev);
 
 
     if (products?.length === 0) {
@@ -73,7 +74,7 @@ const AllProducts = () => {
                         ></div>
 
                         <div className={`fixed top-0 right-0 w-80 h-full bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out 
-                                       ${ showFilters ? "translate-x-0" : "translate-x-full" }`}>
+                                       ${showFilters ? "translate-x-0" : "translate-x-full"}`}>
                             <div className="flex items-center justify-between p-4 border-b">
                                 <h3 className="text-lg font-semibold text-gray-800">
                                     Filters
@@ -95,9 +96,6 @@ const AllProducts = () => {
         );
     }
 
-
-
-
     const handleNext = () => {
         setPage((prev) => prev + 1);
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -108,46 +106,49 @@ const AllProducts = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
-        return (
+    return (
         <div className="min-h-screen bg-gray-50 py-10 px-4 relative">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-10">
-                
+
                 <div>
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
-                        <div className="flex items-center justify-between w-full">
-                            <h2 className="text-2xl font-bold text-gray-800">Our Products</h2>
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 w-full">
+                        <div className="flex items-center justify-between w-full gap-4">
+                            <h2 className="text-2xl font-bold text-gray-800 whitespace-nowrap">Our Products</h2>
 
-                            <button
-                                onClick={toggleFilters}
-                                className="flex items-center gap-2 bg-gray-200 px-3 py-2 rounded-lg 
-                                           text-sm font-medium text-gray-700 hover:bg-gray-300 mx-4
-                                           transition-colors duration-200 lg:hidden"
-                            >
-                                <Filter className="w-4 h-4" />
-                                Filters
-                            </button>
+                            <div className="flex items-center gap-4">
+                                <p className="text-gray-500 text-sm whitespace-nowrap">
+                                    {products?.length || 0} items found
+                                </p>
+
+                                <button
+                                    onClick={toggleFilters}
+                                    className="flex items-center gap-2 bg-gray-200 px-3 py-2 rounded-lg 
+                           text-sm font-medium text-gray-700 hover:bg-gray-300
+                           transition-colors duration-200 lg:hidden"
+                                >
+                                    <Filter className="w-4 h-4" />
+                                    Filters
+                                </button>
+                            </div>
                         </div>
-
-                        <p className="text-gray-500 text-sm mt-2 sm:mt-0">
-                            {products?.length || 0} items found
-                        </p>
                     </div>
 
-          <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
-            {loading
-              ? Array.from({ length: 8 }).map((_, index) => (
-                  <ProductShimmer key={index} />
-                ))
-              : products.map((product) => (
-                  <Link
-                    key={product._id}
-                    to={`/products/${product._id}`}
-                    className="hover:scale-105 transition-transform"
-                  >
-                    <Product product={product} />
-                  </Link>
-                ))}
-          </div>
+
+                    <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
+                        {loading
+                            ? Array.from({ length: 8 }).map((_, index) => (
+                                <ProductShimmer key={index} />
+                            ))
+                            : products.map((product) => (
+                                <Link
+                                    key={product._id}
+                                    to={`/products/${product._id}`}
+                                    className="hover:scale-105 transition-transform"
+                                >
+                                    <Product product={product} />
+                                </Link>
+                            ))}
+                    </div>
 
                     <div className="flex justify-center items-center gap-4 mt-10">
                         <button
